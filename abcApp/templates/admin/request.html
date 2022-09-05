@@ -1,0 +1,80 @@
+{% extends 'master/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<title>Requests</title>
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="list-group">
+			<table>
+				{% for request in allRequest %}
+				<form action="{% url 'delRequest' %}" id="removeRequest" enctype="multipart/form-data" method="POST">
+				{% csrf_token %}
+				<tr>
+					<td>
+						<li class="list-group-item">{{request.request_Obj}}</li>
+					</td>
+					{% if request.request_Text != ""%}
+					<td>
+						<li class="list-group-item">{{request.request_Text}}</li>
+					</td>
+					{% endif %}
+					<td>
+						<div class="cancelRequestButton">
+							<button name="item" class="btn btn-lg btn-danger btn-block" type="submit" value="{{request.id}}">Remove Request</button>
+						</div>
+					</td>
+				</tr>
+				</form>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+</div>
+<br>
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="card">
+			<form class="form-group" method="post">
+				{% csrf_token %}
+				<input type="text" size="100" maxlength="20" name="request_Obj" id="inputRequest" class="form-control input-lg" placeholder="Type Your Request Object HERE..." required autofocus>
+				<br>
+				<input type="text" size="100" maxlength="500" name="request_Text" id="inputRequest" class="form-control input-lg" placeholder="Type Your Request Description HERE...">
+				<br>
+				<input type="checkbox" id="checkPerm" name="isPerm">
+				<label for="checkPerm">Permanent Request</label>
+				{% for field in request_form %}
+				<p>
+				{% for error in field.errors %}
+				<p style="color: red">{{ error }}</p>
+				{% endfor %}
+				</p>
+				{% endfor %}
+		
+				{% if request_form.non_field_errors %}
+				<div style="color: red">
+					<p>{{request_form.non_field_errors}}</p>
+				</div>
+		
+				{% endif %}
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(".cancelRequestButton").click((e) => {
+        if(!confirm('Confirm Delete?')) {
+            return false;
+        }
+        else{
+            return true;
+        }
+    });
+</script>
+
+{% endblock content %}
+

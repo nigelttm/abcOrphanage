@@ -1,0 +1,55 @@
+{% extends 'master/base.html' %}
+{% load static %}
+
+{% block content %}
+<title>Children's Works</title>
+
+<div class="container">
+	<div class="row justify-content-center">
+        {% if works %}
+        <table>
+                {% for w in works %}{% for wt in worksType %}
+                {% if forloop.counter == forloop.parentloop.counter %}
+                {% if forloop.parentloop.counter0|divisibleby:3%}
+                <tr> <!--Create New Row -->
+                {% endif %}
+                <td>
+                        <table>
+                                <tr>
+                                        <th height="50">{{w.upload_name}}</th>
+                                </tr>
+                                <tr height="300">
+                                        <td style="padding-right:20px">
+                                                {% if wt != "mp3"%}
+                                                <img src="\media/{{w.child_object}}" width="300" height="300" alt="img">
+                                                {% else %}
+                                                <audio controls style="width: 300px;">
+                                                        <source src="\media/{{w.child_object}}" type="audio/mp3"/>
+                                                </audio>
+                                                {% endif %}
+                                        </td>
+                                </tr>
+                                <tr>
+                                        <td>
+                                                {% if user.is_authenticated and user.role != "child" %}
+                                                <a name="likeIMG" href="{% url 'like' upload_id=w.id %}">
+                                                        <img src="{% static 'images/default/thumbsup.png' %}" width="50" height="50" alt="thumbs Up">
+                                                </a> 
+                                                {% else %}
+                                                <img src="{% static 'images/default/thumbsup.png' %}" width="50" height="50" alt="thumbs Up">
+                                                {%endif%}
+                                                {{w.likes}}
+                                        </td>
+                                </tr>
+                        </table>
+                </td>
+                {% endif %}
+                {%endfor%}{%endfor%}
+                {% endif %}
+        </table>
+	</div>
+</div>
+
+
+
+{% endblock content %}

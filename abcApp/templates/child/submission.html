@@ -1,0 +1,41 @@
+{% extends 'master/base.html' %}
+{% load static %}
+
+{% block content %}
+<title>Upload Works</title>
+<div class="container">
+	<div class="row justify-content-center">
+        <form class="form-group" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" size="20" maxlength="20" name="upload_name" id="inputName" class="form-control input-lg" placeholder="Type Name of Upload...">
+			<br>
+            <input type="file" name="child_object" id="child_object"  accept=".png, .jpg, .jpeg, .gif, .mp3" required>
+            <br>
+            <br>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Upload</button>
+            <br>
+            
+            {% for field in upload_form %}
+            <p>
+            {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+            {% endfor %}
+            </p>
+            {% endfor %}
+    
+            {% if upload_form.non_field_errors %}
+            <div style="color: red">
+                <p>{{upload_form.non_field_errors}}</p>
+            </div>
+    
+            {% endif %}
+    
+            {% if msg %}
+            <div class="container-fluid">
+                <p style="color: blue">{{ msg }}</p>
+            </div>
+            {%endif%}
+        </form>
+    </div>
+</div>
+{% endblock content %}

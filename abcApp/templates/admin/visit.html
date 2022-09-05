@@ -1,0 +1,94 @@
+{% extends 'master/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .tableRow,.tableCol {
+      border: 1px solid black;
+      padding-right: 10px;
+      padding-left:10px;
+    }
+</style>
+<title>Visits</title>
+{% if acceptedVisits %}
+<div class="container">
+    <div class="row justify-content-center">
+        <table width="40%">
+            <tr>
+                <td>
+                    Upcoming Approved Visits
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Reason
+                </th>
+                <th>
+                    Date of Visit
+                </th>
+                <th>
+                    No. of Visitors
+                </th>
+            </tr>
+            {% for v in acceptedVisits %}
+            <tr>
+                <td>
+                    {% if v.reason == "school" %}
+                    School Visit
+                    {% elif v.reason == "volunteer" %}
+                    Volunteer
+                    {% elif v.reason == "friend" %}
+                    Friend Visit
+                    {% elif v.reason == "relative" %}
+                    Relative Visit
+                    {% endif %}
+                </td>
+                <td>
+                    {{v.visit_date}}
+                </td>
+                <td>
+                    {{v.qty}}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<br>
+{% endif %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="list-group">
+                <table>
+                    {% for v in visits %}
+                    <form action="{% url 'AccRejVisit' %}" id="acceptVisit" enctype="multipart/form-data" method="POST">
+                    {% csrf_token %}
+                    <tr class="tableRow">
+                        <td class="tableCol">
+                            User: {{v.user.user_id}}
+                        </td>
+                        <td class="tableCol">
+                            Date: {{v.visit_date}}
+                        </td>
+                        <td class="tableCol">
+                            No. of ppl: {{v.qty}}
+                        </td>
+                        <td class="tableCol">
+                            Reason: {{v.reason}}
+                        </td>
+                        <td>
+                            <button name="accept" class="btn btn-lg btn-success btn-block" type="submit" value="{{v.id}}">Accept</button>
+                        </td>
+                        <td>
+                            <button name="reject" class="btn btn-lg btn-danger btn-block" type="submit" value="{{v.id}}">Reject</button>
+                        </td>
+                    </tr>
+                    </form>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    {% endblock content %}

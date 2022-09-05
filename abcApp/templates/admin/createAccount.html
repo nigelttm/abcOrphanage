@@ -1,0 +1,91 @@
+{% extends 'master/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style type="text/css">
+
+  .card-signin {
+	  width: 100%;
+	  max-width: 400px;
+	  padding: 15px;
+	  margin: auto;
+  }
+  
+  .form-signin input[type="text"] {
+    margin-bottom: 10px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .form-signin input[type="password"] {
+    margin-bottom: -1px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  tr{
+	height:50px
+  }
+
+</style>
+<title>Create Account</title>
+<div class="container-fluid">
+	<div class="row justify-content-center">
+		<div class="card card-signin">
+		    <form class="form-signin" method="post">
+				{% csrf_token %}
+				<table>
+					<tr>
+						<td>
+							<input type="text" name="user_id" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+						</td>
+					</tr>
+                    <tr>
+                        <td>
+                            <select name="role" id="ddRole" class="form-control" required>
+                                <option value="admin">Admin</option>
+                                <option selected value="child">Child</option>
+                                <option value="user">User</option>
+                            </select>
+                        </td>
+                    </tr>
+					<tr>
+						<td>
+							<input type="password" name="password1" id="inputPassword1" class="form-control" placeholder="Password" required>
+						</td>
+						<td>
+							<input type="password" name="password2" id="inputPassword2" class="form-control" placeholder="Confirm password" required>
+						</td>
+					</tr>
+				</table>
+				
+				{% for field in signup_form %}
+				<p>
+				{% for error in field.errors %}
+				<p style="color: red">{{ error }}</p>
+				{% endfor %}
+				</p>
+				{% endfor %}
+
+				{% if signup_form.non_field_errors %}
+				<div style="color: red">
+					<p>{{signup_form.non_field_errors}}</p>
+				</div>
+
+				{% endif %}
+
+				{% if msg %}
+				<div class="container-fluid">
+					<p style="color: blue">{{ msg }}</p>
+				</div>
+				{%endif%}
+
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
+				</form>
+		  </div>
+		</div>
+
+</div>
+
+{% endblock content %}

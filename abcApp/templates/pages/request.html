@@ -1,0 +1,38 @@
+{% extends 'master/base.html' %}
+{% load static %}
+
+{% block content %}
+<title>Requests</title>
+
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="list-group">
+			<table>
+				{% for request in allRequest %}
+				<form action="{% url 'requestCompleted' %}" method="get">
+				{% csrf_token %}
+				<tr>
+					<td>
+						<li class="list-group-item">{{request.request_Obj}}</li>
+					</td>
+					{% if request.request_Text != ""%}
+					<td>
+						<li class="list-group-item">{{request.request_Text}}</li>
+					</td>
+					{% else %}
+					<td>
+						<li class="list-group-item">No Requirements</li>
+					</td>
+					{% endif %}
+					<td>
+						<button name="item" class="btn btn-lg btn-info btn-block" type="submit" value="{{request.id}}">DONATE</button>
+					</td>
+				</tr>
+				</form>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}
